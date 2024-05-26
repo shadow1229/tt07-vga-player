@@ -13,6 +13,7 @@ module tt_um_shadow1229_vga_player (
     wire hsync;
     wire vsync;
     reg [3:0] spi_uio_out; //wire ->reg is this right?
+	//reg [7:0] spi_uio_in_q_dummy; //to remove warnings
     wire [3:0] spi_uio_in;
     wire [5:0] rrggbb;
     wire [5:0] color_on;
@@ -152,7 +153,7 @@ module tt_um_shadow1229_vga_player (
             threshold_pwm <= 0;
             sound_p_pwm <=0;
             sound_n_pwm <= 1; 
-			//spi_uio_out <= 0;
+			spi_uio_out <= 0;
         end
 
 
@@ -176,6 +177,9 @@ module tt_um_shadow1229_vga_player (
                     spi_clk_on <= 1'b1; //cmd and clk should work simultaneously
                     
                     spi_uio_out[0] <= read_cmd[7-spi_cmd_n];
+                    spi_uio_out[1] <= 0;
+                    spi_uio_out[2] <= 0;
+                    spi_uio_out[3] <= 0;
                     //$display("cmd is %d | %b", spi_cmd_n, read_cmd[7-spi_cmd_n]); //01101011. works fine         //read_cmd = 8'b01101011
                     spi_cmd_n <= spi_cmd_n + 1;
 
@@ -194,6 +198,9 @@ module tt_um_shadow1229_vga_player (
                     end
                 end else if (spi_clk_on == 1 && spi_cmd_on == 0 && spi_addr_on == 1 && spi_dummy_on == 0 && spi_read_on == 0 ) begin
                     spi_uio_out[0] <= addr[23-spi_addr_n];
+                    spi_uio_out[1] <= 0;
+                    spi_uio_out[2] <= 0;
+                    spi_uio_out[3] <= 0;
                     //$display("addr is %d | %d | %b | %b", spi_addr_n, addr, addr, addr[23-spi_addr_n]); //01101011. works fine         //read_cmd = 8'b01101011
                     spi_addr_n <= spi_addr_n + 1;
 
