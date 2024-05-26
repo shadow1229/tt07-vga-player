@@ -4,28 +4,6 @@
 
 - [Read the documentation for project](docs/info.md)
 
-## How it works
-This project plays binary-colored 80px x 60px @ 24fps video recorded in SPI NOR flash, playing with 640px x 480px @72Hz VGA.
-Additionally, the project plays PCM or PWM Audio recorded in same flash chip. 
-The input chooses type of audio(PCM/PWM), type of VGA PMOD, and the color of the video.
-Also, uio[7:2] is used for SPI communication and uio[1:0] is used for audio output.
-Finally, output is used as video output.
- 
-
-## External hardware
-Audio - For PCM, using piezo on uio[1:0] would work. For PWM, external DAC like LTC2644 chip is needed (not tested though)
-Set input[0] low to use 74880Hz 1-bit PCM mode and high to 9360Hz 8-bit PWM mode.
-
-VGA PMOD - you can use one of these VGA PMODs:
-
-* https://github.com/mole99/tiny-vga
-* https://github.com/TinyTapeout/tt-vga-clock-pmod
-Set input[1] low to use tiny-vga and high to use vga-clock
-
-SPI flash (W25Q128JVSSIQ)
-* https://www.adafruit.com/product/5634
-
-
 ## What is Tiny Tapeout?
 
 Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
