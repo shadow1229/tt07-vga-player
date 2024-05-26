@@ -27,8 +27,7 @@ module VgaSyncGen (
             output wire      vsync,         // Vertical sync out
             output reg [9:0] x_px,          // X position for actual pixel.
             output reg [9:0] y_px,          // Y position for actual pixel.
-            output reg [9:0] hc,          // X position for actual pixel.
-            output reg [9:0] vc,          // Y position for actual pixel.
+            output reg [9:0] vc,          //Y(vertical) counter.
             output wire      activevideo
          );
 

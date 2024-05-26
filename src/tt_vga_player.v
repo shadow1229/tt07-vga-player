@@ -58,7 +58,7 @@ module tt_um_shadow1229_vga_player (
     wire [9:0] x_px;          // X position for actual pixel.
     wire [9:0] y_px;          // Y position for actual pixel.
     wire [9:0] vc;          // vertical counter (0 ~480+40-1)
-    wire [9:0] hc;          // horizontal counter (0 ~ 640+192-1) (52*16-1)
+    //wire [9:0] hc;          // horizontal counter (0 ~ 640+192-1) (52*16-1)
     // blocks are 16 x 16 px. (40 x 30 -> 640 x 480)
     /* verilator lint_off WIDTH */
     wire [6:0] x_block = (x_px) >> 3;
@@ -108,7 +108,7 @@ module tt_um_shadow1229_vga_player (
     reg sound_p_pwm;
     reg sound_n_pwm;
 
-    VgaSyncGen vga_0 (.data_done(data_done), .px_clk(px_clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px),.hc(hc),.vc(vc), .activevideo(activevideo), .reset(reset));
+    VgaSyncGen vga_0 (.data_done(data_done), .px_clk(px_clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px),.vc(vc), .activevideo(activevideo), .reset(reset));
     assign rrggbb = activevideo_q &&  data_row[79 - x_block] ? color_on : color_off; 
  
     always @(posedge px_clk) begin
@@ -152,6 +152,7 @@ module tt_um_shadow1229_vga_player (
             threshold_pwm <= 0;
             sound_p_pwm <=0;
             sound_n_pwm <= 1; 
+			spi_uio_out <= 0;
         end
 
 
