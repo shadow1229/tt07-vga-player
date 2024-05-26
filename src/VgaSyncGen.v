@@ -20,7 +20,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VgaSyncGen (
-            input reg        data_done,        // Input clock: 31.5MHz
+            input wire        data_done,        // Input clock: 31.5MHz
             input wire       px_clk,        // Input clock: 31.5MHz
             input wire       reset,         // reset
             output wire      hsync,         // Horizontal sync out
