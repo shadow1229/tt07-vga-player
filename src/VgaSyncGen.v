@@ -61,7 +61,7 @@ module VgaSyncGen (
 
     // Registers for storing the horizontal & vertical counters.
     
-    //reg [9:0] hc;
+    reg [9:0] hc;
     //reg [9:0] vc;
 
     // Counting pixels.
