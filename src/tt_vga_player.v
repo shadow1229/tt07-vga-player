@@ -67,12 +67,12 @@ module tt_um_shadow1229_vga_player (
     wire activevideo;    
     reg [1:0]frame_iter; //24fps - show same frame for three times
     reg [15:0] n_frame;
-    reg [6:0] x_block_q; //to match up signals using x_block_q
+    //reg [6:0] x_block_q; //to match up signals using x_block_q
     reg [6:0] v_block_q;
     reg hsync_q;
     reg vsync_q;
     reg activevideo_q;
-    reg draw;
+    //reg draw;
     reg overflow;
 
     wire px_clk;
@@ -122,12 +122,12 @@ module tt_um_shadow1229_vga_player (
 
             frame_iter <= 0;
             n_frame <= 0;
-            x_block_q <= 0;
+            //x_block_q <= 0;
             v_block_q <= 0;
             hsync_q <= 1;
             vsync_q <= 1;
             activevideo_q <= 0;
-            draw <= 0;
+            //draw <= 0;
             overflow <= 0;
 
             spi_oe <= 0;
@@ -358,7 +358,7 @@ module tt_um_shadow1229_vga_player (
         end
 
         //cache to data
-        x_block_q <= x_block; //is this correct? using reg here
+        //x_block_q <= x_block; //is this correct? using reg here
         v_block_q <= v_block;
         hsync_q <= hsync;
         vsync_q <= vsync;
