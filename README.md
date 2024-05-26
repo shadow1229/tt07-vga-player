@@ -11,24 +11,6 @@ The input chooses type of audio(PCM/PWM), type of VGA PMOD, and the color of the
 Also, uio[7:2] is used for SPI communication and uio[1:0] is used for audio output.
 Finally, output is used as video output.
  
-## How to test
-
-Hook up a VGA monitor to the outputs and provide a clock at 31.5 MHz. 
-choose the type of audio output with input[0], and choose the type of VGA PMOD with the input[1].
-color of pixels which turned off (which data of the pixel is 0) is selected with inputs[4:2] (2:R, 3:G, 4:B), and 
-color of pixels which turned on (which data of the pixel is 1) is selected with inputs[7:5] (5:R, 6:G, 7:B).
-
-Data structure of SPI flash chip:
-1. Data address starts with 0x000000.
-2. Each frame takes 65 x 128 bit, where each 128 bits are used for video/audio data for each line(640px x 8px).
-2.1. Since the video uses 24fps, while the VGA uses 72Hz, each frame is shown three times in the VGA.
-2.2. Thus, each line(=128 bits) are uses as following way:
-     line[127:0] = {audio_0[15:0], audio_1[15:0], audio_2[15:0], video[79:0]},
-     where audio_i is audio data for the line in the (i+1)th iteration.
-2.3 The first 5 lines in the frame are used for porch and vsync, which means video data in the line is ignored.
-    However, audio data in the line still valid. Also, this is why each frame uses 65 x 128 bit and not 60 x 128 bit.
-3. Due to limitation of data, maximum amount of 16131 frames will be supported. reaching 16132th frame will restart the project. (check overflow in tt_vga_player.v)
-For more infomation, check bit_dump_8060_wav.py in bad_apple folder.
 
 ## External hardware
 Audio - For PCM, using piezo on uio[1:0] would work. For PWM, external DAC like LTC2644 chip is needed (not tested though)
