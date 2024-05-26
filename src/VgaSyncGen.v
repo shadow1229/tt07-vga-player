@@ -20,12 +20,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VgaSyncGen (
+            input reg        data_done,        // Input clock: 31.5MHz
             input wire       px_clk,        // Input clock: 31.5MHz
             input wire       reset,         // reset
             output wire      hsync,         // Horizontal sync out
             output wire      vsync,         // Vertical sync out
             output reg [9:0] x_px,          // X position for actual pixel.
             output reg [9:0] y_px,          // Y position for actual pixel.
+            output reg [9:0] hc,          // X position for actual pixel.
+            output reg [9:0] vc,          // Y position for actual pixel.
             output wire      activevideo
          );
 
@@ -58,8 +61,9 @@ module VgaSyncGen (
     parameter vlines = blackV + activeVvideo;   // Total lines.
 
     // Registers for storing the horizontal & vertical counters.
-    reg [9:0] hc;
-    reg [9:0] vc;
+    
+    //reg [9:0] hc;
+    //reg [9:0] vc;
 
     // Counting pixels.
     always @(posedge px_clk)
@@ -67,7 +71,7 @@ module VgaSyncGen (
         if(reset) begin
             hc <= 0;
             vc <= 0;
-        end else begin
+        end if(data_done == 1'b1) begin
             // Keep counting until the end of the line.
             if (hc < hpixels - 1)
                 hc <= hc + 1;
@@ -87,8 +91,8 @@ module VgaSyncGen (
      end
 
     // Generate sync pulses (active low) and active video.
-    assign hsync = (hc >= hfp && hc < hfp + hpulse) ? 0:1;
-    assign vsync = (vc >= vfp && vc < vfp + vpulse) ? 0:1;
+    assign hsync = (hc >= hfp && hc < hfp + hpulse) ? 0:1; 
+    assign vsync = (vc >= vfp && vc < vfp + vpulse) ? 0:1; 
     assign activevideo = (hc >= blackH && vc >= blackV) ? 1:0;
 
     // Generate color.
@@ -97,7 +101,7 @@ module VgaSyncGen (
         if(reset) begin
             x_px <= 0;
             y_px <= 0;
-        end else begin
+        end if(data_done == 1'b1) begin
             x_px <= hc - blackH;
             y_px <= vc - blackV;
         end
