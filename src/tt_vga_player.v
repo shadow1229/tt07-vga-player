@@ -12,7 +12,7 @@ module tt_um_shadow1229_vga_player (
     
     wire hsync;
     wire vsync;
-    wire [3:0] spi_uio_out;
+    reg [3:0] spi_uio_out; //wire ->reg is this right?
     wire [3:0] spi_uio_in;
     wire [5:0] rrggbb;
     wire [5:0] color_on;
@@ -152,7 +152,7 @@ module tt_um_shadow1229_vga_player (
             threshold_pwm <= 0;
             sound_p_pwm <=0;
             sound_n_pwm <= 1; 
-			spi_uio_out <= 0;
+			//spi_uio_out <= 0;
         end
 
 
