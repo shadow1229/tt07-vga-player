@@ -13,8 +13,7 @@ module tt_um_shadow1229_vga_player (
     wire hsync;
     wire vsync;
     reg [3:0] spi_uio_out; //wire ->reg is this right?
-	//reg [7:0] spi_uio_in_q_dummy; //to remove warnings
-    wire [3:0] spi_uio_in;
+	reg [7:0] uio_in_q_dummy; //to remove warnings, is this right???
     wire [5:0] rrggbb;
     wire [5:0] color_on;
     wire [5:0] color_off;    
@@ -154,6 +153,7 @@ module tt_um_shadow1229_vga_player (
             sound_p_pwm <=0;
             sound_n_pwm <= 1; 
 			spi_uio_out <= 0;
+			uio_in_q_dummy<=0;
         end
 
 
@@ -172,6 +172,7 @@ module tt_um_shadow1229_vga_player (
                     spi_cmd_on <= 1'b1;
                     spi_cmd_n <= 0;
                     cache_row <= 0;
+					uio_in_q_dummy[7:0] <= uio_in[7:0];
 
                 end else if (spi_cmd_on == 1 && spi_addr_on == 0 && spi_dummy_on == 0 && spi_read_on == 0 ) begin
                     spi_clk_on <= 1'b1; //cmd and clk should work simultaneously
