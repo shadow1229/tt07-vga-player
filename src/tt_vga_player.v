@@ -76,7 +76,7 @@ module tt_um_shadow1229_vga_player (
 
     wire px_clk;
     wire spi_clk;
-    wire [7:0] read_cmd = 8'b01101011; //Fast Read Quad Output (6Bh, MSB -> LSB, read at rising clk of spi_clk. = falling clk of px_clk)
+    reg [7:0] read_cmd = 8'b01101011; //Fast Read Quad Output (6Bh, MSB -> LSB, read at rising clk of spi_clk. = falling clk of px_clk)
     wire spi_sel;
     assign px_clk = clk;
     assign spi_clk = ~clk && spi_clk_on;
@@ -225,123 +225,22 @@ module tt_um_shadow1229_vga_player (
                 end else if (spi_clk_on == 1 && spi_cmd_on == 0 && spi_addr_on == 0 && spi_dummy_on == 0 && spi_read_on == 1 ) begin
                     //1 clk delay in uio_in
                     //$display("read_n %d %b", spi_read_n,uio_in[5:2]);
-                    case (spi_read_n)
-                          1: begin
-                            cache_row[127:124] <= uio_in[5:2];
-                        end
-                          2: begin
-                            cache_row[123:120] <= uio_in[5:2];
-                        end
-                          3: begin
-                            cache_row[119:116] <= uio_in[5:2];
-                        end
-                          4: begin
-                            cache_row[115:112] <= uio_in[5:2];
-                        end
-                          5: begin
-                            cache_row[111:108] <= uio_in[5:2];
-                        end
-
-                          6: begin
-                            cache_row[107:104] <= uio_in[5:2];
-                        end
-                          7: begin
-                            cache_row[103:100] <= uio_in[5:2];
-                        end
-                          8: begin
-                            cache_row[99:96] <= uio_in[5:2];
-                        end
-                          9: begin
-                            cache_row[95:92] <= uio_in[5:2];
-                        end
-                         10: begin
-                            cache_row[91:88] <= uio_in[5:2];
-                        end
-
-                         11: begin
-                            cache_row[87:84] <= uio_in[5:2];
-                        end
-                         12: begin
-                            cache_row[83:80] <= uio_in[5:2];
-                        end
-                         13: begin
-                            cache_row[79:76] <= uio_in[5:2];
-                        end
-                         14: begin
-                            cache_row[75:72] <= uio_in[5:2];
-                        end
-                         15: begin
-                            cache_row[71:68] <= uio_in[5:2];
-                        end
-
-                         16: begin
-                            cache_row[67:64] <= uio_in[5:2];
-                        end
-                         17: begin
-                            cache_row[63:60] <= uio_in[5:2];
-                        end
-                         18: begin
-                            cache_row[59:56] <= uio_in[5:2];
-                        end
-                         19: begin
-                            cache_row[55:52] <= uio_in[5:2];
-                        end
-                         20: begin
-                            cache_row[51:48] <= uio_in[5:2];
-                        end
-
-                         21: begin
-                            cache_row[47:44] <= uio_in[5:2];
-                        end
-                         22: begin
-                            cache_row[43:40] <= uio_in[5:2];
-                        end
-                         23: begin
-                            cache_row[39:36] <= uio_in[5:2];
-                        end
-                         24: begin
-                            cache_row[35:32] <= uio_in[5:2];
-                        end
-                         25: begin
-                            cache_row[31:28] <= uio_in[5:2];
-                        end
-
-                         26: begin
-                            cache_row[27:24] <= uio_in[5:2];
-                        end
-                         27: begin
-                            cache_row[23:20] <= uio_in[5:2];
-                        end
-                         28: begin
-                            cache_row[19:16] <= uio_in[5:2];
-                        end
-                         29: begin
-                            cache_row[15:12] <= uio_in[5:2];
-                        end
-                         30: begin
-                            cache_row[11: 8] <= uio_in[5:2];
-                        end
-                         31: begin
-                            cache_row[7 : 4] <= uio_in[5:2];
-                        end
-                         32: begin
-                            cache_row[3 : 0] <= uio_in[5:2];
-                            spi_read_on <= 0;
-                            cache_done <= 1;
-                            //$display("read end cache_row  : %b", cache_row);
-                            //$display("read end data_row   : %b\n", data_row);
-                        end
-
-                    default begin 
-
-                    end                    
-                    endcase
+                    if (spi_read_n > 0 && spi_read_n <= 32) begin
+                        cache_row <= {cache_row[123:0], uio_in[5:2]};
+                    end
                     
+                    if (spi_read_n == 32) begin
+                        spi_read_on <= 0;
+                        cache_done <= 1;
+                        //$display("read end cache_row  : %b", cache_row);
+                        //$display("read end data_row   : %b\n", data_row);
+                    end
+
+                    spi_read_n <= spi_read_n + 1;
                     
                     //$display("read_n is %d ", spi_read_n); //01101011. works fine         //read_cmd = 8'b01101011
                     //$display("spi_uio_in: %b %b", uio_in, uio_in[5:2]);
                     //$display("cache_row: %b\n", cache_row);
-                    spi_read_n <= spi_read_n + 1;
                     
                 end
             end
