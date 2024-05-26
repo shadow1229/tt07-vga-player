@@ -50,7 +50,7 @@ module tt_um_shadow1229_vga_player (
     wire reset = ~rst_n;
 
     reg [127:0] cache_row; //10Byte for line / 3x2 byte for sound
-    reg [79:0] data_row;
+    reg [127:0] data_row;
     reg cache_done;
     reg data_done;
 
@@ -359,7 +359,7 @@ module tt_um_shadow1229_vga_player (
         if(data_done == 1'b0 && cache_done == 1'b1) begin
             data_done <= 1'b1;
             cache_done <= 1'b0;
-            data_row[79:0] <= cache_row[79:0];
+            data_row[127:0] <= cache_row[127:0];
         end
 
         //cache to data
@@ -389,7 +389,7 @@ module tt_um_shadow1229_vga_player (
         //update sound and video data        
         if (x_px == 832 && y_px%8 == 0 && cache_done == 1'b1) begin
             cache_done <= 1'b0;
-            data_row[79:0] <= cache_row[79:0]; // video update
+            data_row[127:0] <= cache_row[127:0]; // video update
             sound_block_pcm <= 0;
             //sound_block_pwm <= 0;
             case (frame_iter)
