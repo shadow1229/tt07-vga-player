@@ -5,7 +5,7 @@
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = tt_vga_player.v
+PROJECT_SOURCES = tt_vga_player.v  VgaSyncGen.v
 
 ifneq ($(GATES),yes)
 
